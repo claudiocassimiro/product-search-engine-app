@@ -1,23 +1,25 @@
 import styles from "./styles.module.css";
 import { useState } from "react";
 import Dropdown from "../Dropdown";
+import { Products } from "@/utils/types";
+
+type Results = Products;
 
 const FiltersAndSearchResults = () => {
   const [inputValue, setInputValue] = useState("");
   const [isOpenDropDownWeb, setIsOpenDropDownWeb] = useState(false);
-  const [isOpenDropDownCategorie, setIsOpenDropDownCategorie] = useState(false);
-  const [selectedWebOption, setSelectedWebOption] = useState("");
-  const [selectedCategoreOption, setSelectedCategoreOption] = useState("");
+  const [isOpenDropDownCategory, setIsOpenDropDownCategory] = useState(false);
+  const [selectedWebOption, setSelectedWebOption] = useState("Todos");
+  const [selectedCategoryOption, setSelectedCategoryOption] = useState("");
   const [alertText, setAlertText] = useState(
     "Você pode selecionar alguns filtros:"
   );
+  const [results, setResults] = useState<Results[]>([]);
 
   const getResults = async () => {
-    if (
-      selectedCategoreOption.length === 0 &&
-      selectedWebOption.length === 0 &&
-      inputValue.length === 0
-    ) {
+    const meliProducts = [];
+    const buscapeProducts = [];
+    if (selectedCategoryOption.length === 0 && inputValue.length === 0) {
       return setAlertText(
         "Escolha um filtro ou utilize o input de busca para procurar por um produto."
       );
@@ -25,10 +27,41 @@ const FiltersAndSearchResults = () => {
       setAlertText("Você pode selecionar alguns filtros:");
     }
 
-    console.log("inputValue", inputValue);
-    console.log("selectedWebOption", selectedWebOption);
-    console.log("selectedCategoreOption", selectedCategoreOption);
+    try {
+      if (
+        selectedWebOption === "MercadoLivre" ||
+        selectedWebOption === "Todos"
+      ) {
+        const response = await fetch(
+          `${process.env.API_URL}/api/getMLProducts?web=${selectedWebOption}&category=${selectedCategoryOption}&inputValue=${inputValue}`
+        );
+
+        const result = await response.json();
+        meliProducts.push(...result.products);
+      }
+
+      if (selectedWebOption === "Buscapé" || selectedWebOption === "Todos") {
+        const response = await fetch(
+          `${process.env.API_URL}/api/getBuscapeProducts?web=${selectedWebOption}&category=${selectedCategoryOption}&inputValue=${inputValue}`
+        );
+
+        const result = await response.json();
+        buscapeProducts.push(...result.products);
+      }
+
+      setResults([...meliProducts, ...buscapeProducts]);
+    } catch (error) {
+      console.log(error);
+      setAlertText(
+        "Ops, parece que aconteceu algum problema, tente recarregar a pagina e fazer sua busca novamente!"
+      );
+    } finally {
+      setInputValue("");
+      setSelectedCategoryOption("");
+    }
   };
+
+  console.log(results);
 
   return (
     <div className={styles.containerFiltersAndSearchBar}>
@@ -70,18 +103,18 @@ const FiltersAndSearchResults = () => {
 
         <div className={styles.wrapper}>
           <button
-            onClick={() => setIsOpenDropDownCategorie(!isOpenDropDownCategorie)}
+            onClick={() => setIsOpenDropDownCategory(!isOpenDropDownCategory)}
             type="button"
             className={styles.dropdownButton}
           >
-            {selectedCategoreOption.length > 0
-              ? `Categorias: ${selectedCategoreOption}`
+            {selectedCategoryOption.length > 0
+              ? `Categorias: ${selectedCategoryOption}`
               : "Categorias"}
           </button>
-          {isOpenDropDownCategorie ? (
+          {isOpenDropDownCategory ? (
             <Dropdown
-              handleSelectedOption={setSelectedCategoreOption}
-              handleDropdown={setIsOpenDropDownCategorie}
+              handleSelectedOption={setSelectedCategoryOption}
+              handleDropdown={setIsOpenDropDownCategory}
               dropdownOptions={["Geladeira", "TV", "Celular"]}
             />
           ) : null}

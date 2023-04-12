@@ -1,0 +1,27 @@
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  padding: 0.8rem;
+  border: 0.1rem solid black;
+  border-radius: 0.4rem;
+  margin-top: 0.8rem;
+}
+
+.dropdownOption {
+  padding: 1rem 0.5rem 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.dropdownOption:focus {
+  background-color: black;
+}
+
+.dropdownOption:hover {
+  background-color: black;
+  padding-bottom: 1rem;
+  color: white;
+  border-radius: 0.8rem;
+  border-bottom: 0.1rem solid black;
+}

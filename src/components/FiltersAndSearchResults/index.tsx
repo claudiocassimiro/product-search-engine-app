@@ -61,8 +61,6 @@ const FiltersAndSearchResults = () => {
     }
   };
 
-  console.log(results);
-
   return (
     <div className={styles.containerFiltersAndSearchBar}>
       <div className={styles.searchBarContainer}>

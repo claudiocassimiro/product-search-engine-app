@@ -1,11 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import type * as puppeteerType from "puppeteer";
 import { Products } from "@/utils/types";
 
 type BuscapeProducts = Products;
 
 let chrome = {} as any;
-let puppeteer: typeof puppeteerType;
+let puppeteer: any;
 
 if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
   chrome = require("chrome-aws-lambda");
@@ -51,7 +50,7 @@ export default async function getBuscapeProducts(
 
     const productCategory = await getCategory[2].$eval(
       ".Breadcrumbs_BreadCrumb__15SH4",
-      (el) => el.getAttribute("title")
+      (el: any) => el.getAttribute("title")
     );
 
     const products = await page.$$(".Paper_Paper__HIHv0");
@@ -60,19 +59,19 @@ export default async function getBuscapeProducts(
       const product = products[i];
       const productName = await product.$eval(
         ".SearchCard_ProductCard_Name__ZaO5o",
-        (el) => el.textContent
+        (el: any) => el.textContent
       );
       const productPrice = await product.$eval(
         ".Text_MobileHeadingS__Zxam2",
-        (el) => el.textContent
+        (el: any) => el.textContent
       );
       const productImage = await product.$eval(
         ".SearchCard_ProductCard_Image__ffKkn span img",
-        (el) => el.getAttribute("src")
+        (el: any) => el.getAttribute("src")
       );
       const productLink = await product.$eval(
         ".SearchCard_ProductCard_Inner__7JhKb",
-        (el) => el.getAttribute("href")
+        (el: any) => el.getAttribute("href")
       );
 
       buscapeProducts.push({

@@ -19,16 +19,13 @@ export default async function getMLProducts(
 ) {
   const { web, category, inputValue } = req.query;
 
-  let options = {};
+  let options = {
+    args: ["--no-sandbox"],
+  } as any;
 
   if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
     options = {
-      args: [
-        ...chrome.args,
-        "--hide-scrollbars",
-        "--disable-web-security",
-        "--no-sandbox",
-      ],
+      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
       defaultViewport: chrome.defaultViewport,
       executablePath: await chrome.executablePath,
       headless: true,

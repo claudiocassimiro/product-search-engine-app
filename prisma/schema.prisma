@@ -10,8 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Search {
+  id          String      @id @default(uuid())
+  inputValue  String      @default("") @db.VarChar(100)
+  website     String      @default("") @db.VarChar(20)
+  category    String      @default("") @db.VarChar(20)
+  products    Product[]
+}
+
 model Product {
   id                  String      @id @default(uuid())
+  search              Search      @relation(fields: [searchId], references: [id])
+  searchId            String
   productImage        String      @default("") @db.VarChar(1000)
   productDescription  String      @default("") @db.VarChar(2000)
   productCategory     String      @default("") @db.VarChar(20)

@@ -62,10 +62,9 @@ export default async function getBuscapeProducts(
     }
 
     await browser.close();
-    console.log(buscapeProducts);
-    res.status(200).json({ products: buscapeProducts });
+    return res.status(200).json({ products: buscapeProducts });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }

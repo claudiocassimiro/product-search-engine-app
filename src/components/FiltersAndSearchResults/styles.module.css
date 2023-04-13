@@ -1,0 +1,53 @@
+.containerFiltersAndSearchBar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.searchBarContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.searchInput,
+.searchButton,
+.dropdownButton {
+  padding: 0.8rem;
+  border-radius: 0.8rem;
+  outline: none;
+  border: 0.01rem solid black;
+}
+
+.searchInput {
+  width: 70%;
+}
+
+.searchButton {
+  background-color: cadetblue;
+  color: white;
+  font-weight: 700;
+  width: 28%;
+}
+
+.alertText {
+  text-align: center;
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.containerDropDown {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.dropdownButton {
+  min-width: 10rem;
+  color: white;
+  background-color: tomato;
+  font-weight: 700;
+}

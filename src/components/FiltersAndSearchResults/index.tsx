@@ -46,11 +46,15 @@ const FiltersAndSearchResults = () => {
         );
       }
       const responses = await Promise.all(requests);
-      const [meliProducts, buscapeProducts] = await Promise.all(
+      const results = await Promise.all(
         responses.map((response) => response.json())
       );
 
-      setResults([...meliProducts.products, ...buscapeProducts.products]);
+      if (results.length === 2) {
+        return setResults([...results[0].products, ...results[1].products]);
+      }
+
+      return setResults([...results[0].products]);
     } catch (error) {
       setAlertText(
         "Ops, parece que aconteceu algum problema, tente recarregar a pagina e fazer sua busca novamente!"

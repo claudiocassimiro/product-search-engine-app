@@ -17,8 +17,7 @@ const FiltersAndSearchResults = () => {
   const [results, setResults] = useState<Results[]>([]);
 
   const getResults = async () => {
-    const meliProducts = [];
-    const buscapeProducts = [];
+    const requests = [];
     if (selectedCategoryOption.length === 0 && inputValue.length === 0) {
       return setAlertText(
         "Escolha um filtro ou utilize o input de busca para procurar por um produto."
@@ -32,26 +31,27 @@ const FiltersAndSearchResults = () => {
         selectedWebOption === "MercadoLivre" ||
         selectedWebOption === "Todos"
       ) {
-        const response = await fetch(
-          `${process.env.API_URL}/api/getMLProducts?web=${selectedWebOption}&category=${selectedCategoryOption}&inputValue=${inputValue}`
+        requests.push(
+          fetch(
+            `${process.env.API_URL}/api/getMLProducts?web=${selectedWebOption}&category=${selectedCategoryOption}&inputValue=${inputValue}`
+          )
         );
-
-        const result = await response.json();
-        meliProducts.push(...result.products);
       }
 
       if (selectedWebOption === "Buscapé" || selectedWebOption === "Todos") {
-        const response = await fetch(
-          `${process.env.API_URL}/api/getBuscapeProducts?web=${selectedWebOption}&category=${selectedCategoryOption}&inputValue=${inputValue}`
+        requests.push(
+          fetch(
+            `${process.env.API_URL}/api/getBuscapeProducts?web=${selectedWebOption}&category=${selectedCategoryOption}&inputValue=${inputValue}`
+          )
         );
-
-        const result = await response.json();
-        buscapeProducts.push(...result.products);
       }
+      const responses = await Promise.all(requests);
+      const [meliProducts, buscapeProducts] = await Promise.all(
+        responses.map((response) => response.json())
+      );
 
-      setResults([...meliProducts, ...buscapeProducts]);
+      setResults([...meliProducts.products, ...buscapeProducts.products]);
     } catch (error) {
-      console.log(error);
       setAlertText(
         "Ops, parece que aconteceu algum problema, tente recarregar a pagina e fazer sua busca novamente!"
       );

@@ -1,16 +1,38 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import puppeteer from "puppeteer";
 import { Products } from "@/utils/types";
 
 type MeliProducts = Products;
+
+let chrome = {} as any;
+let puppeteer: any;
+
+if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+  chrome = require("chrome-aws-lambda");
+  puppeteer = require("puppeteer-core");
+} else {
+  puppeteer = require("puppeteer");
+}
 
 export default async function getMLProducts(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { web, category, inputValue } = req.query;
+
+  let options = {};
+
+  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    options = {
+      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+      defaultViewport: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
+      headless: true,
+      ignoreHTTPSErrors: true,
+    };
+  }
+
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     const meliProducts = [] as MeliProducts[];
 
@@ -27,7 +49,7 @@ export default async function getMLProducts(
 
     const productCategory = await getCategory[0].$eval(
       ".andes-breadcrumb__link",
-      (el) => el.getAttribute("title")
+      (el: any) => el.getAttribute("title")
     );
 
     const products = await page.$$(".ui-search-layout li");
@@ -36,17 +58,17 @@ export default async function getMLProducts(
       const product = products[i];
       const productName = await product.$eval(
         ".ui-search-item__title",
-        (el) => el.textContent
+        (el: any) => el.textContent
       );
       const productPrice = await product.$eval(
         ".price-tag-amount",
-        (el) => el.textContent
+        (el: any) => el.textContent
       );
       const productImage = await product.$eval(
         ".ui-search-result-image__element",
-        (el) => el.getAttribute("src")
+        (el: any) => el.getAttribute("src")
       );
-      const productLink = await product.$eval(".ui-search-link", (el) =>
+      const productLink = await product.$eval(".ui-search-link", (el: any) =>
         el.getAttribute("href")
       );
 

@@ -1,11 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import puppeteerType from "puppeteer";
-import chromeType from "chrome-aws-lambda";
+import type * as puppeteerType from "puppeteer";
 import { Products } from "@/utils/types";
 
 type BuscapeProducts = Products;
 
-let chrome = {} as typeof chromeType;
+let chrome = {} as any;
 let puppeteer: typeof puppeteerType;
 
 if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {

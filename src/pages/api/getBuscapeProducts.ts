@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Products } from "@/utils/types";
 import prisma from "../../../lib/prisma";
+import { getThreeFirstWords } from "@/utils/helpers";
 
 type BuscapeProducts = Products;
 
@@ -97,7 +98,8 @@ export default async function getBuscapeProducts(
       );
 
       buscapeProducts.push({
-        productName,
+        productName: getThreeFirstWords(productName) || "",
+        productDescription: productName,
         productPrice,
         productImage,
         productLink: `${url}${productLink}`,
@@ -127,6 +129,7 @@ export default async function getBuscapeProducts(
         data: {
           searchId: product.searchId || "",
           productImage: product.productImage || "",
+          productName: getThreeFirstWords(product.productName) || "",
           productDescription: product.productName || "",
           productCategory: product.productCategory || "",
           productPrice: product.productPrice || "",

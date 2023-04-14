@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Products } from "@/utils/types";
 import prisma from "../../../lib/prisma";
+import { getThreeFirstWords } from "@/utils/helpers";
 
 type MeliProducts = Products;
 
@@ -95,7 +96,8 @@ export default async function getMLProducts(
       );
 
       meliProducts.push({
-        productName,
+        productName: getThreeFirstWords(productName) || "",
+        productDescription: productName,
         productPrice,
         productImage,
         productLink,
@@ -120,13 +122,12 @@ export default async function getMLProducts(
       searchId: id,
     }));
 
-    console.log("meli", mappedMeliProducts);
-
     const addMeliProductsToDatabase = mappedMeliProducts.map((product) =>
       prisma.product.create({
         data: {
           searchId: product.searchId || "",
           productImage: product.productImage || "",
+          productName: getThreeFirstWords(product.productName) || "",
           productDescription: product.productName || "",
           productCategory: product.productCategory || "",
           productPrice: product.productPrice || "",

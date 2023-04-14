@@ -1,9 +1,15 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import FiltersAndSearchResults from "@/components/FiltersAndSearchResults";
+import { useState } from "react";
+import { Products } from "@/utils/types";
 // import Image from "next/image";
+import ContainerProducts from "@/components/ContainerProducts";
+import Loading from "@/components/Loading";
 
 export default function Home() {
+  const [products, setProducts] = useState<Products[]>([]);
+  const [loading, setLoading] = useState(false);
   return (
     <>
       <Head>
@@ -21,7 +27,11 @@ export default function Home() {
           <h1 className={styles.title}>EasyBuy</h1>
           {/* Burger Button com links para GitHub e LinkedIn */}
         </header>
-        <FiltersAndSearchResults />
+        <FiltersAndSearchResults
+          setProducts={setProducts}
+          setLoading={setLoading}
+        />
+        {loading ? <Loading /> : <ContainerProducts products={products} />}
       </main>
     </>
   );

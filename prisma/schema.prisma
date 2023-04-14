@@ -19,7 +19,8 @@ model Product {
   id                 String @id @default(uuid())
   searchId           String
   productImage       String @default("") @db.VarChar(1000)
-  productDescription String @default("") @db.VarChar(2000)
+  productName        String @default("") @db.VarChar(500)
+  productDescription String @default("") @db.VarChar(500)
   productCategory    String @default("") @db.VarChar(50)
   productPrice       String @default("") @db.VarChar(20)
   productWebsite     String @default("") @db.VarChar(1000)

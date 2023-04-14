@@ -70,10 +70,10 @@ export default async function getMLProducts(
     await page.waitForSelector(".ui-search");
     const getCategory = await page.$$(".andes-breadcrumb li");
 
-    const productCategory = await getCategory[0].$eval(
-      ".andes-breadcrumb__link",
-      (el: any) => el.getAttribute("title")
-    );
+    const productCategory =
+      (await getCategory[0]?.$eval(".andes-breadcrumb__link", (el: any) =>
+        el.getAttribute("title")
+      )) || "";
 
     const products = await page.$$(".ui-search-layout li");
 

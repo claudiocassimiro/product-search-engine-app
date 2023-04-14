@@ -71,18 +71,13 @@ export default async function getBuscapeProducts(
     await page.waitForSelector(".Content_Container__heIrp");
     const getCategory = await page.$$(".Breadcrumbs_BreadCrumbs__5EM9j li");
 
-    console.log("entrei 1");
-
     const productCategory =
       (await getCategory[2]?.$eval(
         ".Breadcrumbs_BreadCrumb__15SH4",
         (el: any) => el.getAttribute("title")
       )) || "";
 
-    console.log("entrei 2");
-
     const products = await page.$$(".Paper_Paper__HIHv0");
-    console.log("entrei 3");
 
     for (let i = 0; i < 5; i++) {
       const product = products[i];
@@ -103,8 +98,6 @@ export default async function getBuscapeProducts(
         (el: any) => el.getAttribute("href")
       );
 
-      console.log("entrei 4");
-
       buscapeProducts.push({
         productName: getThreeFirstWords(productName) || "",
         productDescription: productName,
@@ -115,7 +108,6 @@ export default async function getBuscapeProducts(
       });
     }
 
-    console.log("entrei 5");
     await browser.close();
 
     const search = await prisma.search.create({

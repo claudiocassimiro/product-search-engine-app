@@ -46,15 +46,28 @@ const FiltersAndSearchResults = () => {
         );
       }
       const responses = await Promise.all(requests);
-      const results = await Promise.all(
+      const result = await Promise.all(
         responses.map((response) => response.json())
       );
 
-      if (results.length === 2) {
-        return setResults([...results[0].products, ...results[1].products]);
+      if (result.length === 1 && result[0].inputValue === inputValue) {
+        const { products } = result[0];
+        return setResults([...products]);
       }
 
-      return setResults([...results[0].products]);
+      if (result.length === 2 && result[0].inputValue === inputValue) {
+        const [meliProducts, buscapeProducts] = result;
+        return setResults([
+          ...meliProducts.products,
+          ...buscapeProducts.products,
+        ]);
+      }
+
+      if (result.length === 2) {
+        return setResults([...result[0].products, ...result[1].products]);
+      }
+
+      return setResults([...result[0].products]);
     } catch (error) {
       setAlertText(
         "Ops, parece que aconteceu algum problema, tente recarregar a pagina e fazer sua busca novamente!"

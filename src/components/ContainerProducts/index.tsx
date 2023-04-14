@@ -1,13 +1,14 @@
 import Image from "next/image";
 import styles from "./styles.module.css";
 import { Products } from "@/utils/types";
+import NotFoundProduct from "../NotFoundProduct";
 
 interface ContainerProductsProps {
   products: Products[];
 }
 
 const ContainerProducts = ({ products }: ContainerProductsProps) => {
-  return (
+  return products.length > 0 ? (
     <div className={styles.containerProducts}>
       {products.map((item, index) =>
         item.productImage?.startsWith("https") ? (
@@ -44,6 +45,8 @@ const ContainerProducts = ({ products }: ContainerProductsProps) => {
         ) : null
       )}
     </div>
+  ) : (
+    <NotFoundProduct />
   );
 };
 

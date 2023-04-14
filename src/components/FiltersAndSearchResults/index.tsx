@@ -23,6 +23,7 @@ const FiltersAndSearchResults = ({
 
   const getResults = async () => {
     setLoading(true);
+    setProducts([]);
     const requests = [];
     if (selectedCategoryOption.length === 0 && inputValue.length === 0) {
       return setAlertText(

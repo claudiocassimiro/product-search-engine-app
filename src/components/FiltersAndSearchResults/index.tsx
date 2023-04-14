@@ -3,9 +3,15 @@ import { useState } from "react";
 import Dropdown from "../Dropdown";
 import { Products } from "@/utils/types";
 
-type Results = Products;
+interface FiltersAndSearchResultsProps {
+  setProducts: (products: Products[]) => void;
+  setLoading: (value: boolean) => void;
+}
 
-const FiltersAndSearchResults = () => {
+const FiltersAndSearchResults = ({
+  setProducts,
+  setLoading,
+}: FiltersAndSearchResultsProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isOpenDropDownWeb, setIsOpenDropDownWeb] = useState(false);
   const [isOpenDropDownCategory, setIsOpenDropDownCategory] = useState(false);
@@ -14,9 +20,9 @@ const FiltersAndSearchResults = () => {
   const [alertText, setAlertText] = useState(
     "Você pode selecionar alguns filtros:"
   );
-  const [results, setResults] = useState<Results[]>([]);
 
   const getResults = async () => {
+    setLoading(true);
     const requests = [];
     if (selectedCategoryOption.length === 0 && inputValue.length === 0) {
       return setAlertText(
@@ -52,22 +58,22 @@ const FiltersAndSearchResults = () => {
 
       if (result.length === 1 && result[0].inputValue === inputValue) {
         const { products } = result[0];
-        return setResults([...products]);
+        return setProducts([...products]);
       }
 
       if (result.length === 2 && result[0].inputValue === inputValue) {
         const [meliProducts, buscapeProducts] = result;
-        return setResults([
+        return setProducts([
           ...meliProducts.products,
           ...buscapeProducts.products,
         ]);
       }
 
       if (result.length === 2) {
-        return setResults([...result[0].products, ...result[1].products]);
+        return setProducts([...result[0].products, ...result[1].products]);
       }
 
-      return setResults([...result[0].products]);
+      return setProducts([...result[0].products]);
     } catch (error) {
       setAlertText(
         "Ops, parece que aconteceu algum problema, tente recarregar a pagina e fazer sua busca novamente!"
@@ -75,6 +81,7 @@ const FiltersAndSearchResults = () => {
     } finally {
       setInputValue("");
       setSelectedCategoryOption("");
+      setLoading(false);
     }
   };
 
@@ -97,7 +104,6 @@ const FiltersAndSearchResults = () => {
           Search
         </button>
       </div>
-      <p className={styles.alertText}>{alertText}</p>
       <div className={styles.containerDropDown}>
         <div className={styles.wrapper}>
           <button

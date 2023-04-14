@@ -6,9 +6,11 @@ import { Products } from "@/utils/types";
 // import Image from "next/image";
 import ContainerProducts from "@/components/ContainerProducts";
 import Loading from "@/components/Loading";
+import Image from "next/image";
+import { products as productsmock } from "@/utils/mocks";
 
 export default function Home() {
-  const [products, setProducts] = useState<Products[]>([]);
+  const [products, setProducts] = useState<Products[]>(productsmock);
   const [loading, setLoading] = useState(false);
   return (
     <>
@@ -22,9 +24,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" /> {/* Trocar esse favicon */}
       </Head>
       <main className={styles.main}>
-        <header className={styles.header}>
-          {/* <Image /> */}
-          <h1 className={styles.title}>EasyBuy</h1>
+        <header
+          data-aos="zoom-out-right"
+          data-aos-duration="500"
+          className={styles.header}
+        >
+          <Image
+            src="/easybuy-logo.webp"
+            alt="imagem da logo da easybuy"
+            width={80}
+            height={80}
+          />
           {/* Burger Button com links para GitHub e LinkedIn */}
         </header>
         <FiltersAndSearchResults

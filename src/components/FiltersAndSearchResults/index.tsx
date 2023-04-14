@@ -88,7 +88,11 @@ const FiltersAndSearchResults = ({
 
   return (
     <div className={styles.containerFiltersAndSearchBar}>
-      <div className={styles.searchBarContainer}>
+      <div
+        data-aos="fade-down"
+        data-aos-duration="500"
+        className={styles.searchBarContainer}
+      >
         <input
           className={styles.searchInput}
           type="text"
@@ -106,7 +110,11 @@ const FiltersAndSearchResults = ({
         </button>
       </div>
       <div className={styles.containerDropDown}>
-        <div className={styles.wrapper}>
+        <div
+          data-aos="fade-right"
+          data-aos-duration="500"
+          className={styles.wrapper}
+        >
           <button
             onClick={() => setIsOpenDropDownWeb(!isOpenDropDownWeb)}
             type="button"
@@ -123,7 +131,11 @@ const FiltersAndSearchResults = ({
           ) : null}
         </div>
 
-        <div className={styles.wrapper}>
+        <div
+          data-aos="fade-left"
+          data-aos-duration="500"
+          className={styles.wrapper}
+        >
           <button
             onClick={() => setIsOpenDropDownCategory(!isOpenDropDownCategory)}
             type="button"

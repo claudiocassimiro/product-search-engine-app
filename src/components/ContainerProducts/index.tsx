@@ -13,15 +13,17 @@ const ContainerProducts = ({ products }: ContainerProductsProps) => {
       {products.map((item, index) =>
         item.productImage?.startsWith("https") ? (
           <div
+            data-aos="flip-left"
+            data-aos-duration="500"
             className={styles.productWrapper}
             key={`${item.productName}-${index}`}
           >
             <div className={styles.containerImage}>
               <Image
+                className={styles.image}
                 src={item.productImage || ""}
                 alt={`Imagem do producto ${item.productName}`}
-                width={200}
-                height={200}
+                fill
               />
             </div>
             <div className={styles.wrapper}>

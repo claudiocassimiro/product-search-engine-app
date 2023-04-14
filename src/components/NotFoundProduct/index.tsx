@@ -3,7 +3,11 @@ import styles from "./styles.module.css";
 
 const NotFoundProduct = () => {
   return (
-    <div className={styles.container}>
+    <div
+      data-aos="flip-left"
+      data-aos-duration="500"
+      className={styles.container}
+    >
       <p className={styles.containerMessage}>
         Ops! Parece que não existe resultados para essa pesquisa, tente buscar
         por outro produto!

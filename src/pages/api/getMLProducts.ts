@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Products } from "@/utils/types";
+import prisma from "../../../lib/prisma";
 
 type MeliProducts = Products;
 
@@ -17,7 +18,26 @@ export default async function getMLProducts(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { web, category, inputValue } = req.query;
+  const { web = "", category = "", inputValue = "" } = req.query;
+
+  try {
+    const products = await prisma.search.findFirst({
+      where: {
+        website: `MercadoLivre`,
+        inputValue: `${inputValue}`.toLowerCase(),
+        category: `${category}`,
+      },
+      include: {
+        products: true,
+      },
+    });
+
+    if (products) {
+      return res.status(200).json(products);
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
 
   let options = {
     args: ["--no-sandbox"],
@@ -84,6 +104,39 @@ export default async function getMLProducts(
     }
 
     await browser.close();
+
+    const search = await prisma.search.create({
+      data: {
+        website: `MercadoLivre`,
+        category: `${category}`,
+        inputValue: `${inputValue}`.toLowerCase(),
+      },
+    });
+
+    const { id } = search;
+
+    const mappedMeliProducts = meliProducts.map((product) => ({
+      ...product,
+      searchId: id,
+    }));
+
+    console.log("meli", mappedMeliProducts);
+
+    const addMeliProductsToDatabase = mappedMeliProducts.map((product) =>
+      prisma.product.create({
+        data: {
+          searchId: product.searchId || "",
+          productImage: product.productImage || "",
+          productDescription: product.productName || "",
+          productCategory: product.productCategory || "",
+          productPrice: product.productPrice || "",
+          productWebsite: product.productLink || "",
+        },
+      })
+    );
+
+    await Promise.all(addMeliProductsToDatabase);
+
     return res.status(200).json({ products: meliProducts });
   } catch (error) {
     console.log(error);

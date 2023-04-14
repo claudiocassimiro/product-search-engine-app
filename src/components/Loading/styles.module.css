@@ -1,0 +1,11 @@
+.containerLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5rem;
+}
+
+.loadingText {
+  font-size: 3rem;
+  font-weight: 700;
+}

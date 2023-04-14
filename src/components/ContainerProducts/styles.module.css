@@ -9,6 +9,7 @@
 .productWrapper {
   width: 100%;
   padding: 1.5rem;
+  background-color: #f0f0f0;
   border: 0.1rem solid black;
   border-radius: 0.8rem;
   margin: 1rem 0;
@@ -26,8 +27,22 @@
   margin: 1rem 0;
 }
 
+.image {
+  border-radius: 0.8rem;
+  -webkit-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+}
+
 .wrapper {
   width: 100%;
+  background-color: rgb(49, 49, 49);
+  border: 0.1rem solid black;
+  border-radius: 0.8rem;
+  padding: 0.5rem;
+  -webkit-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
 }
 
 .productName {

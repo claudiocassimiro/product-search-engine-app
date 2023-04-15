@@ -157,7 +157,13 @@ const FiltersAndSearchResults = ({
           </div>
         </div>
       </div>
-      <p className={styles.alertText}>{alertText}</p>
+      <p
+        data-aos="zoom-in"
+        data-aos-duration="500"
+        className={styles.alertText}
+      >
+        {alertText}
+      </p>
     </>
   );
 };

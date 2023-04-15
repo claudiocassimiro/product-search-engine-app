@@ -119,8 +119,9 @@ const FiltersAndSearchResults = ({
             onClick={() => setIsOpenDropDownWeb(!isOpenDropDownWeb)}
             type="button"
             className={styles.dropdownButton}
+            data-testid="web-button-filter"
           >
-            {selectedWebOption.length > 0 ? `Web: ${selectedWebOption}` : "Web"}
+            {`Web: ${selectedWebOption}`}
           </button>
           {isOpenDropDownWeb ? (
             <Dropdown
@@ -140,10 +141,11 @@ const FiltersAndSearchResults = ({
             onClick={() => setIsOpenDropDownCategory(!isOpenDropDownCategory)}
             type="button"
             className={styles.dropdownButton}
+            data-testid="category-button-filter"
           >
             {selectedCategoryOption.length > 0
-              ? `Categorias: ${selectedCategoryOption}`
-              : "Categorias"}
+              ? `Categoria: ${selectedCategoryOption}`
+              : "Categoria"}
           </button>
           {isOpenDropDownCategory ? (
             <Dropdown

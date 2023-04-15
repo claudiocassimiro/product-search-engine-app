@@ -18,13 +18,10 @@ const FiltersAndSearchResults = ({
   const [selectedWebOption, setSelectedWebOption] = useState("Todos");
   const [selectedCategoryOption, setSelectedCategoryOption] = useState("");
   const [alertText, setAlertText] = useState(
-    "Você pode selecionar alguns filtros:"
+    "Você pode selecionar alguns filtros"
   );
 
   const getResults = async () => {
-    setLoading(true);
-    setProducts([]);
-    const requests = [];
     if (selectedCategoryOption.length === 0 && inputValue.length === 0) {
       return setAlertText(
         "Escolha um filtro ou utilize o input de busca para procurar por um produto."
@@ -32,6 +29,10 @@ const FiltersAndSearchResults = ({
     } else {
       setAlertText("Você pode selecionar alguns filtros:");
     }
+
+    setLoading(true);
+    setProducts([]);
+    const requests = [];
 
     try {
       if (
@@ -76,9 +77,7 @@ const FiltersAndSearchResults = ({
 
       return setProducts([...result[0].products]);
     } catch (error) {
-      setAlertText(
-        "Ops, parece que aconteceu algum problema, tente recarregar a pagina e fazer sua busca novamente!"
-      );
+      setAlertText("");
     } finally {
       setInputValue("");
       setSelectedCategoryOption("");
@@ -87,76 +86,79 @@ const FiltersAndSearchResults = ({
   };
 
   return (
-    <div className={styles.containerFiltersAndSearchBar}>
-      <div
-        data-aos="fade-down"
-        data-aos-duration="500"
-        className={styles.searchBarContainer}
-      >
-        <input
-          className={styles.searchInput}
-          type="text"
-          name="inputValue"
-          value={inputValue}
-          onChange={(event) => setInputValue(event.target.value)}
-          placeholder="Digite o nome do Produto"
-        />
-        <button
-          onClick={getResults}
-          type="button"
-          className={styles.searchButton}
-        >
-          Search
-        </button>
-      </div>
-      <div className={styles.containerDropDown}>
+    <>
+      <div className={styles.containerFiltersAndSearchBar}>
         <div
-          data-aos="fade-right"
+          data-aos="fade-down"
           data-aos-duration="500"
-          className={styles.wrapper}
+          className={styles.searchBarContainer}
         >
+          <input
+            className={styles.searchInput}
+            type="text"
+            name="inputValue"
+            value={inputValue}
+            onChange={(event) => setInputValue(event.target.value)}
+            placeholder="Digite o nome do Produto"
+          />
           <button
-            onClick={() => setIsOpenDropDownWeb(!isOpenDropDownWeb)}
+            onClick={getResults}
             type="button"
-            className={styles.dropdownButton}
-            data-testid="web-button-filter"
+            className={styles.searchButton}
           >
-            {`Web: ${selectedWebOption}`}
+            Search
           </button>
-          {isOpenDropDownWeb ? (
-            <Dropdown
-              handleSelectedOption={setSelectedWebOption}
-              handleDropdown={setIsOpenDropDownWeb}
-              dropdownOptions={["Todos", "MercadoLivre", "Buscapé"]}
-            />
-          ) : null}
         </div>
+        <div className={styles.containerDropDown}>
+          <div
+            data-aos="fade-right"
+            data-aos-duration="500"
+            className={styles.wrapper}
+          >
+            <button
+              onClick={() => setIsOpenDropDownWeb(!isOpenDropDownWeb)}
+              type="button"
+              className={styles.dropdownButton}
+              data-testid="web-button-filter"
+            >
+              {`Web: ${selectedWebOption}`}
+            </button>
+            {isOpenDropDownWeb ? (
+              <Dropdown
+                handleSelectedOption={setSelectedWebOption}
+                handleDropdown={setIsOpenDropDownWeb}
+                dropdownOptions={["Todos", "MercadoLivre", "Buscapé"]}
+              />
+            ) : null}
+          </div>
 
-        <div
-          data-aos="fade-left"
-          data-aos-duration="500"
-          className={styles.wrapper}
-        >
-          <button
-            onClick={() => setIsOpenDropDownCategory(!isOpenDropDownCategory)}
-            type="button"
-            className={styles.dropdownButton}
-            data-testid="category-button-filter"
+          <div
+            data-aos="fade-left"
+            data-aos-duration="500"
+            className={styles.wrapper}
           >
-            {selectedCategoryOption.length > 0
-              ? `Categoria: ${selectedCategoryOption}`
-              : "Categoria"}
-          </button>
-          {isOpenDropDownCategory ? (
-            <Dropdown
-              handleSelectedOption={setSelectedCategoryOption}
-              handleDropdown={setIsOpenDropDownCategory}
-              dropdownOptions={["Geladeira", "TV", "Celular"]}
-            />
-          ) : null}
+            <button
+              onClick={() => setIsOpenDropDownCategory(!isOpenDropDownCategory)}
+              type="button"
+              className={styles.dropdownButton}
+              data-testid="category-button-filter"
+            >
+              {selectedCategoryOption.length > 0
+                ? `Categoria: ${selectedCategoryOption}`
+                : "Categoria"}
+            </button>
+            {isOpenDropDownCategory ? (
+              <Dropdown
+                handleSelectedOption={setSelectedCategoryOption}
+                handleDropdown={setIsOpenDropDownCategory}
+                dropdownOptions={["Geladeira", "TV", "Celular"]}
+              />
+            ) : null}
+          </div>
         </div>
       </div>
-    </div>
+      <p className={styles.alertText}>{alertText}</p>
+    </>
   );
 };
 

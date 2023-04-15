@@ -32,8 +32,8 @@ export default function Home() {
           <Image
             src="/easybuy-logo.webp"
             alt="imagem da logo da easybuy"
-            width={80}
-            height={80}
+            width={120}
+            height={120}
           />
           {/* Burger Button com links para GitHub e LinkedIn */}
         </header>

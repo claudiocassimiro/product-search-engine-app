@@ -3,7 +3,6 @@ import styles from "@/styles/Home.module.css";
 import FiltersAndSearchResults from "@/components/FiltersAndSearchResults";
 import { useState } from "react";
 import { Products } from "@/utils/types";
-// import Image from "next/image";
 import ContainerProducts from "@/components/ContainerProducts";
 import Loading from "@/components/Loading";
 import Image from "next/image";
@@ -35,7 +34,6 @@ export default function Home() {
             width={120}
             height={120}
           />
-          {/* Burger Button com links para GitHub e LinkedIn */}
         </header>
         <FiltersAndSearchResults
           setProducts={setProducts}

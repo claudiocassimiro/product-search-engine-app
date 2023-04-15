@@ -9,10 +9,11 @@ interface ContainerProductsProps {
 
 const ContainerProducts = ({ products }: ContainerProductsProps) => {
   return products.length > 0 ? (
-    <div className={styles.containerProducts}>
+    <div data-testid="container-projects" className={styles.containerProducts}>
       {products.map((item, index) =>
         item.productImage?.startsWith("https") ? (
           <div
+            data-testid="productWrapper"
             data-aos="flip-left"
             data-aos-duration="500"
             className={styles.productWrapper}

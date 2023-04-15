@@ -4,6 +4,7 @@ import styles from "./styles.module.css";
 const NotFoundProduct = () => {
   return (
     <div
+      data-testid="NotFoundProduct"
       data-aos="flip-left"
       data-aos-duration="500"
       className={styles.container}

@@ -45,6 +45,12 @@
   font-weight: 700;
 }
 
+.alertText {
+  font-size: 1.4rem;
+  text-align: center;
+  margin: 1.4rem 0;
+}
+
 @media (min-width: 768px) {
   .containerFiltersAndSearchBar {
     flex-direction: row-reverse;

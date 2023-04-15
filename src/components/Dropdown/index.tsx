@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styles from "./styles.module.css";
 
 interface DropdownProps {
@@ -17,13 +16,14 @@ const Dropdown = ({
     handleDropdown(false);
   };
   return (
-    <div className={styles.dropdown}>
-      {dropdownOptions.map((option) => {
+    <div data-testid="dropdown" className={styles.dropdown}>
+      {dropdownOptions.map((option, index) => {
         return (
           <span
             onClick={() => handleOption(option)}
             key={option}
             className={styles.dropdownOption}
+            data-testid={`option-${index}`}
           >
             {option}
           </span>

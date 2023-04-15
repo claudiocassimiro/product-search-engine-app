@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Products } from "@/utils/types";
+import prisma from "../../../lib/prisma";
+import { getThreeFirstWords } from "@/utils/helpers";
 
 type BuscapeProducts = Products;
 
@@ -17,7 +19,26 @@ export default async function getBuscapeProducts(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { web, category, inputValue } = req.query;
+  const { web = "", category = "", inputValue = "" } = req.query;
+
+  try {
+    const products = await prisma.search.findFirst({
+      where: {
+        website: `Buscapé`,
+        inputValue: `${inputValue}`.toLowerCase(),
+        category: `${category}`,
+      },
+      include: {
+        products: true,
+      },
+    });
+
+    if (products) {
+      return res.status(200).json(products);
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
 
   let options = {
     args: ["--no-sandbox"],
@@ -50,10 +71,11 @@ export default async function getBuscapeProducts(
     await page.waitForSelector(".Content_Container__heIrp");
     const getCategory = await page.$$(".Breadcrumbs_BreadCrumbs__5EM9j li");
 
-    const productCategory = await getCategory[2].$eval(
-      ".Breadcrumbs_BreadCrumb__15SH4",
-      (el: any) => el.getAttribute("title")
-    );
+    const productCategory =
+      (await getCategory[2]?.$eval(
+        ".Breadcrumbs_BreadCrumb__15SH4",
+        (el: any) => el.getAttribute("title")
+      )) || "";
 
     const products = await page.$$(".Paper_Paper__HIHv0");
 
@@ -77,7 +99,8 @@ export default async function getBuscapeProducts(
       );
 
       buscapeProducts.push({
-        productName,
+        productName: getThreeFirstWords(productName) || "",
+        productDescription: productName,
         productPrice,
         productImage,
         productLink: `${url}${productLink}`,
@@ -86,9 +109,40 @@ export default async function getBuscapeProducts(
     }
 
     await browser.close();
+
+    const search = await prisma.search.create({
+      data: {
+        website: `Buscapé`,
+        category: `${category}`,
+        inputValue: `${inputValue}`.toLowerCase(),
+      },
+    });
+
+    const { id } = search;
+
+    const mappedBuscapeProducts = buscapeProducts.map((product) => ({
+      ...product,
+      searchId: id,
+    }));
+
+    const addBuscapeProductsToDatabase = mappedBuscapeProducts.map((product) =>
+      prisma.product.create({
+        data: {
+          searchId: product.searchId || "",
+          productImage: product.productImage || "",
+          productName: getThreeFirstWords(product.productName) || "",
+          productDescription: product.productName || "",
+          productCategory: product.productCategory || "",
+          productPrice: product.productPrice || "",
+          productWebsite: product.productLink || "",
+        },
+      })
+    );
+
+    await Promise.all(addBuscapeProductsToDatabase);
+
     return res.status(200).json({ products: buscapeProducts });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }

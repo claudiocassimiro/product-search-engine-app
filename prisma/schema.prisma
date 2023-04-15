@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,11 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Search {
+  id         String    @id @default(uuid())
+  inputValue String    @default("") @db.VarChar(100)
+  website    String    @default("") @db.VarChar(20)
+  category   String    @default("") @db.VarChar(20)
+  products   Product[]
+}
+
 model Product {
-  id                  String      @id @default(uuid())
-  productImage        String      @default("") @db.VarChar(1000)
-  productDescription  String      @default("") @db.VarChar(2000)
-  productCategory     String      @default("") @db.VarChar(20)
-  productPrice        Float
-  productWebsite      String      @default("") @db.VarChar(1000)
+  id                 String @id @default(uuid())
+  searchId           String
+  productImage       String @default("") @db.VarChar(1000)
+  productName        String @default("") @db.VarChar(500)
+  productDescription String @default("") @db.VarChar(500)
+  productCategory    String @default("") @db.VarChar(50)
+  productPrice       String @default("") @db.VarChar(20)
+  productWebsite     String @default("") @db.VarChar(1000)
+  search             Search @relation(fields: [searchId], references: [id])
 }

@@ -3,21 +3,25 @@ import { useState } from "react";
 import Dropdown from "../Dropdown";
 import { Products } from "@/utils/types";
 
-type Results = Products;
+interface FiltersAndSearchResultsProps {
+  setProducts: (products: Products[]) => void;
+  setLoading: (value: boolean) => void;
+}
 
-const FiltersAndSearchResults = () => {
+const FiltersAndSearchResults = ({
+  setProducts,
+  setLoading,
+}: FiltersAndSearchResultsProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isOpenDropDownWeb, setIsOpenDropDownWeb] = useState(false);
   const [isOpenDropDownCategory, setIsOpenDropDownCategory] = useState(false);
   const [selectedWebOption, setSelectedWebOption] = useState("Todos");
   const [selectedCategoryOption, setSelectedCategoryOption] = useState("");
   const [alertText, setAlertText] = useState(
-    "Você pode selecionar alguns filtros:"
+    "Você pode selecionar alguns filtros"
   );
-  const [results, setResults] = useState<Results[]>([]);
 
   const getResults = async () => {
-    const requests = [];
     if (selectedCategoryOption.length === 0 && inputValue.length === 0) {
       return setAlertText(
         "Escolha um filtro ou utilize o input de busca para procurar por um produto."
@@ -25,6 +29,10 @@ const FiltersAndSearchResults = () => {
     } else {
       setAlertText("Você pode selecionar alguns filtros:");
     }
+
+    setLoading(true);
+    setProducts([]);
+    const requests = [];
 
     try {
       if (
@@ -46,83 +54,117 @@ const FiltersAndSearchResults = () => {
         );
       }
       const responses = await Promise.all(requests);
-      const results = await Promise.all(
+      const result = await Promise.all(
         responses.map((response) => response.json())
       );
 
-      if (results.length === 2) {
-        return setResults([...results[0].products, ...results[1].products]);
+      if (result.length === 1 && result[0].inputValue === inputValue) {
+        const { products } = result[0];
+        return setProducts([...products]);
       }
 
-      return setResults([...results[0].products]);
+      if (result.length === 2 && result[0].inputValue === inputValue) {
+        const [meliProducts, buscapeProducts] = result;
+        return setProducts([
+          ...meliProducts.products,
+          ...buscapeProducts.products,
+        ]);
+      }
+
+      if (result.length === 2) {
+        return setProducts([...result[0].products, ...result[1].products]);
+      }
+
+      return setProducts([...result[0].products]);
     } catch (error) {
-      setAlertText(
-        "Ops, parece que aconteceu algum problema, tente recarregar a pagina e fazer sua busca novamente!"
-      );
+      setAlertText("");
     } finally {
       setInputValue("");
       setSelectedCategoryOption("");
+      setLoading(false);
     }
   };
 
   return (
-    <div className={styles.containerFiltersAndSearchBar}>
-      <div className={styles.searchBarContainer}>
-        <input
-          className={styles.searchInput}
-          type="text"
-          name="inputValue"
-          value={inputValue}
-          onChange={(event) => setInputValue(event.target.value)}
-          placeholder="Digite o nome do Produto"
-        />
-        <button
-          onClick={getResults}
-          type="button"
-          className={styles.searchButton}
+    <>
+      <div className={styles.containerFiltersAndSearchBar}>
+        <div
+          data-aos="fade-down"
+          data-aos-duration="500"
+          className={styles.searchBarContainer}
         >
-          Search
-        </button>
-      </div>
-      <p className={styles.alertText}>{alertText}</p>
-      <div className={styles.containerDropDown}>
-        <div className={styles.wrapper}>
+          <input
+            className={styles.searchInput}
+            type="text"
+            name="inputValue"
+            value={inputValue}
+            onChange={(event) => setInputValue(event.target.value)}
+            placeholder="Digite o nome do Produto"
+          />
           <button
-            onClick={() => setIsOpenDropDownWeb(!isOpenDropDownWeb)}
+            onClick={getResults}
             type="button"
-            className={styles.dropdownButton}
+            className={styles.searchButton}
           >
-            {selectedWebOption.length > 0 ? `Web: ${selectedWebOption}` : "Web"}
+            Search
           </button>
-          {isOpenDropDownWeb ? (
-            <Dropdown
-              handleSelectedOption={setSelectedWebOption}
-              handleDropdown={setIsOpenDropDownWeb}
-              dropdownOptions={["Todos", "MercadoLivre", "Buscapé"]}
-            />
-          ) : null}
         </div>
+        <div className={styles.containerDropDown}>
+          <div
+            data-aos="fade-right"
+            data-aos-duration="500"
+            className={styles.wrapper}
+          >
+            <button
+              onClick={() => setIsOpenDropDownWeb(!isOpenDropDownWeb)}
+              type="button"
+              className={styles.dropdownButton}
+              data-testid="web-button-filter"
+            >
+              {`Web: ${selectedWebOption}`}
+            </button>
+            {isOpenDropDownWeb ? (
+              <Dropdown
+                handleSelectedOption={setSelectedWebOption}
+                handleDropdown={setIsOpenDropDownWeb}
+                dropdownOptions={["Todos", "MercadoLivre", "Buscapé"]}
+              />
+            ) : null}
+          </div>
 
-        <div className={styles.wrapper}>
-          <button
-            onClick={() => setIsOpenDropDownCategory(!isOpenDropDownCategory)}
-            type="button"
-            className={styles.dropdownButton}
+          <div
+            data-aos="fade-left"
+            data-aos-duration="500"
+            className={styles.wrapper}
           >
-            {selectedCategoryOption.length > 0
-              ? `Categorias: ${selectedCategoryOption}`
-              : "Categorias"}
-          </button>
-          {isOpenDropDownCategory ? (
-            <Dropdown
-              handleSelectedOption={setSelectedCategoryOption}
-              handleDropdown={setIsOpenDropDownCategory}
-              dropdownOptions={["Geladeira", "TV", "Celular"]}
-            />
-          ) : null}
+            <button
+              onClick={() => setIsOpenDropDownCategory(!isOpenDropDownCategory)}
+              type="button"
+              className={styles.dropdownButton}
+              data-testid="category-button-filter"
+            >
+              {selectedCategoryOption.length > 0
+                ? `Categoria: ${selectedCategoryOption}`
+                : "Categoria"}
+            </button>
+            {isOpenDropDownCategory ? (
+              <Dropdown
+                handleSelectedOption={setSelectedCategoryOption}
+                handleDropdown={setIsOpenDropDownCategory}
+                dropdownOptions={["Geladeira", "TV", "Celular"]}
+              />
+            ) : null}
+          </div>
         </div>
       </div>
-    </div>
+      <p
+        data-aos="zoom-in"
+        data-aos-duration="500"
+        className={styles.alertText}
+      >
+        {alertText}
+      </p>
+    </>
   );
 };
 

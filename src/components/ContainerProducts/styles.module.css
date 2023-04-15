@@ -1,0 +1,104 @@
+.containerProducts,
+.productWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.productWrapper {
+  width: 100%;
+  padding: 1.5rem;
+  background-color: #f0f0f0;
+  border: 0.1rem solid black;
+  border-radius: 0.8rem;
+  margin: 1rem 0;
+  -webkit-box-shadow: 6px 4px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 6px 4px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 6px 4px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.containerImage {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 20rem;
+  height: 20rem;
+  margin: 1rem 0;
+}
+
+.image {
+  border-radius: 0.8rem;
+  -webkit-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+}
+
+.wrapper {
+  width: 100%;
+  background-color: rgb(49, 49, 49);
+  border: 0.1rem solid black;
+  border-radius: 0.8rem;
+  padding: 0.5rem;
+  -webkit-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+}
+
+.productName {
+  font-size: 1.5rem;
+  margin: 0.3rem 0;
+}
+
+.productDescription {
+  font-size: 1.2rem;
+}
+
+.productPrice {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.goToSiteButton {
+  color: black;
+  background-color: bisque;
+  border-radius: 0.4rem;
+  text-align: center;
+  width: 100%;
+  padding: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 1rem 0;
+  -webkit-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  box-shadow: 4px 3px 5px 0px rgba(0, 0, 0, 0.35);
+  transition: 0.2s;
+}
+
+.goToSiteButton:hover {
+  background-color: rgb(212, 178, 137);
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .containerProducts {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 144rem;
+    margin: 0 auto;
+  }
+
+  .productWrapper {
+    width: 45%;
+    height: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .productWrapper {
+    width: 30%;
+    height: 400px;
+  }
+}

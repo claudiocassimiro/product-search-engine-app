@@ -7,7 +7,7 @@
 .searchBarContainer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 1rem;
   width: 100%;
 }
@@ -32,13 +32,6 @@
   width: 28%;
 }
 
-.alertText {
-  text-align: center;
-  margin-bottom: 0.8rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
 .containerDropDown {
   display: flex;
   justify-content: space-evenly;
@@ -50,4 +43,34 @@
   color: white;
   background-color: tomato;
   font-weight: 700;
+}
+
+.alertText {
+  font-size: 1.4rem;
+  text-align: center;
+  margin: 1.4rem 0;
+}
+
+@media (min-width: 768px) {
+  .containerFiltersAndSearchBar {
+    flex-direction: row-reverse;
+    max-width: 144rem;
+    margin: 0 auto;
+  }
+
+  .containerDropDown {
+    width: 50%;
+  }
+}
+
+@media (min-width: 1020px) {
+  .dropdownButton {
+    min-width: 15rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .dropdownButton {
+    min-width: 20rem;
+  }
 }

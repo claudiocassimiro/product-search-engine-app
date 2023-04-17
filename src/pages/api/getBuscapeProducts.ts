@@ -19,7 +19,7 @@ export default async function getBuscapeProducts(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { web = "", category = "", inputValue = "" } = req.query;
+  const { category = "", inputValue = "" } = req.query;
 
   try {
     const products = await prisma.search.findFirst({
@@ -69,12 +69,14 @@ export default async function getBuscapeProducts(
     await page.keyboard.press("Enter");
 
     await page.waitForSelector(".Content_Container__heIrp");
-    const getCategory = await page.$$(".Breadcrumbs_BreadCrumbs__5EM9j li");
+    const getCategory = await page.$(
+      ".Dropdown_Dropdown__yBuX5 .Dropdown_DropdownHeader__N3Zqc"
+    );
 
     const productCategory =
-      (await getCategory[2]?.$eval(
-        ".Breadcrumbs_BreadCrumb__15SH4",
-        (el: any) => el.getAttribute("title")
+      (await getCategory?.$eval(
+        ".Dropdown_DropdownTitle__DjEsK",
+        (el: any) => el.textContent
       )) || "";
 
     const products = await page.$$(".Paper_Paper__HIHv0");

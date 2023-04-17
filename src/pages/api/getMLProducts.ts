@@ -37,7 +37,7 @@ export default async function getMLProducts(
       return res.status(200).json(products);
     }
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ products: [] });
   }
 
   let options = {
@@ -67,7 +67,7 @@ export default async function getMLProducts(
     await searchInput?.type(`${category} ${inputValue}`);
     await page.keyboard.press("Enter");
 
-    await page.waitForSelector(".ui-search");
+    await page.waitForSelector(".ui-search", { timeout: 15000 });
     const getCategory = await page.$$(".andes-breadcrumb li");
 
     const productCategory =
@@ -142,6 +142,6 @@ export default async function getMLProducts(
 
     return res.status(200).json({ products: meliProducts });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ products: [] });
   }
 }

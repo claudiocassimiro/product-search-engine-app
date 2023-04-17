@@ -77,7 +77,9 @@ export default async function getMLProducts(
 
     const products = await page.$$(".ui-search-layout li");
 
-    for (let i = 0; i < 5; i++) {
+    let range = products.length >= 5 ? 5 : products.length;
+
+    for (let i = 0; i < range; i++) {
       const product = products[i];
       const productName = await product.$eval(
         ".ui-search-item__title",

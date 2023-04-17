@@ -69,19 +69,19 @@ export default async function getBuscapeProducts(
     await page.keyboard.press("Enter");
 
     await page.waitForSelector(".Content_Container__heIrp");
-    const getCategory = await page.$(
-      ".Dropdown_Dropdown__yBuX5 .Dropdown_DropdownHeader__N3Zqc"
-    );
+    const getCategory = await page.$$(".Dropdown_Dropdown__yBuX5 div");
 
     const productCategory =
-      (await getCategory?.$eval(
+      (await getCategory[0]?.$eval(
         ".Dropdown_DropdownTitle__DjEsK",
         (el: any) => el.textContent
       )) || "";
 
     const products = await page.$$(".Paper_Paper__HIHv0");
 
-    for (let i = 0; i < 5; i++) {
+    let range = products.length >= 5 ? 5 : products.length;
+
+    for (let i = 0; i < range; i++) {
       const product = products[i];
       const productName = await product.$eval(
         ".SearchCard_ProductCard_Name__ZaO5o",

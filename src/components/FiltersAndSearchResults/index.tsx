@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Dropdown from "../Dropdown";
 import { Products } from "@/utils/types";
 
@@ -21,7 +21,8 @@ const FiltersAndSearchResults = ({
     "Você pode selecionar alguns filtros"
   );
 
-  const getResults = async () => {
+  const getResults = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (selectedCategoryOption.length === 0 && inputValue.length === 0) {
       return setAlertText(
         "Escolha um filtro ou utilize o input de busca para procurar por um produto."
@@ -41,7 +42,7 @@ const FiltersAndSearchResults = ({
       ) {
         requests.push(
           fetch(
-            `${process.env.API_URL}/api/getMLProducts?web=${selectedWebOption}&category=${selectedCategoryOption}&inputValue=${inputValue}`
+            `${process.env.API_URL}/api/getMLProducts?category=${selectedCategoryOption}&inputValue=${inputValue}`
           )
         );
       }
@@ -49,7 +50,7 @@ const FiltersAndSearchResults = ({
       if (selectedWebOption === "Buscapé" || selectedWebOption === "Todos") {
         requests.push(
           fetch(
-            `${process.env.API_URL}/api/getBuscapeProducts?web=${selectedWebOption}&category=${selectedCategoryOption}&inputValue=${inputValue}`
+            `${process.env.API_URL}/api/getBuscapeProducts?category=${selectedCategoryOption}&inputValue=${inputValue}`
           )
         );
       }
@@ -88,10 +89,11 @@ const FiltersAndSearchResults = ({
   return (
     <>
       <div className={styles.containerFiltersAndSearchBar}>
-        <div
+        <form
           data-aos="fade-down"
           data-aos-duration="500"
           className={styles.searchBarContainer}
+          onSubmit={(e) => getResults(e)}
         >
           <input
             className={styles.searchInput}
@@ -101,14 +103,11 @@ const FiltersAndSearchResults = ({
             onChange={(event) => setInputValue(event.target.value)}
             placeholder="Digite o nome do Produto"
           />
-          <button
-            onClick={getResults}
-            type="button"
-            className={styles.searchButton}
-          >
+          <button type="submit" className={styles.searchButton}>
             Search
           </button>
-        </div>
+        </form>
+
         <div className={styles.containerDropDown}>
           <div
             data-aos="fade-right"

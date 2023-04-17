@@ -37,7 +37,7 @@ export default async function getBuscapeProducts(
       return res.status(200).json(products);
     }
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ products: [] });
   }
 
   let options = {
@@ -68,7 +68,7 @@ export default async function getBuscapeProducts(
     await searchInput?.type(`${category} ${inputValue}`);
     await page.keyboard.press("Enter");
 
-    await page.waitForSelector(".Content_Container__heIrp");
+    await page.waitForSelector(".Content_Container__heIrp", { timeout: 15000 });
     const getCategory = await page.$$(".Dropdown_Dropdown__yBuX5 div");
 
     const productCategory =
@@ -145,6 +145,6 @@ export default async function getBuscapeProducts(
 
     return res.status(200).json({ products: buscapeProducts });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ products: [] });
   }
 }

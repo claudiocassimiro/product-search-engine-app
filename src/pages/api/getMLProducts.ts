@@ -19,7 +19,7 @@ export default async function getMLProducts(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { web = "", category = "", inputValue = "" } = req.query;
+  const { category = "", inputValue = "" } = req.query;
 
   try {
     const products = await prisma.search.findFirst({

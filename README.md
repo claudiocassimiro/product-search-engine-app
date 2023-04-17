@@ -4,7 +4,13 @@ The project was written with TypeScript, the API used was `Next Api`, the lib to
 
 ## Getting Started
 
-First, run the development server:
+First, run the postgresql database on docker with
+
+```bash
+docker-compose up
+```
+
+so, run the development server:
 
 ```bash
 npm run dev

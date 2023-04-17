@@ -13,7 +13,11 @@ const Loading = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setStep(step + 1);
+      if (step !== 3) {
+        setStep(step + 1);
+      }
+
+      return;
     }, 1500);
     return () => {
       clearInterval(intervalId);

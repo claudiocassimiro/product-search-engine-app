@@ -9,20 +9,20 @@ datasource db {
 
 model Search {
   id         String    @id @default(uuid())
-  inputValue String    @default("") @db.VarChar(100)
-  website    String    @default("") @db.VarChar(20)
-  category   String    @default("") @db.VarChar(20)
+  inputValue String    @default("")
+  website    String    @default("")
+  category   String    @default("")
   products   Product[]
 }
 
 model Product {
   id                 String @id @default(uuid())
   searchId           String
-  productImage       String @default("") @db.VarChar(1000)
-  productName        String @default("") @db.VarChar(500)
-  productDescription String @default("") @db.VarChar(500)
-  productCategory    String @default("") @db.VarChar(50)
-  productPrice       String @default("") @db.VarChar(20)
-  productWebsite     String @default("") @db.VarChar(1000)
+  productImage       String @default("")
+  productDescription String @default("")
+  productCategory    String @default("")
+  productPrice       String @default("")
+  productWebsite     String @default("")
+  productName        String @default("")
   search             Search @relation(fields: [searchId], references: [id])
 }
